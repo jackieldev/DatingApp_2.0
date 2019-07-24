@@ -38,6 +38,7 @@ import { HasRoleDirective } from './_directives/hasRole.directive';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { AdminService } from './_services/admin.service';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
+import { PhotoManagementComponent } from './admin/photo-management/photo-management.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -61,7 +62,7 @@ export function tokenGetter() {
       AdminPanelComponent,
       HasRoleDirective,
       UserManagementComponent,
-      PhotoEditorComponent,
+      PhotoManagementComponent,
       RolesModalComponent
    ],
    imports: [
