@@ -652,9 +652,8 @@ var AdminService = /** @class */ (function () {
     AdminService.prototype.getUsersWithRoles = function () {
         return this.http.get(this.baseUrl + 'admin/usersWithRoles');
     };
-    // roles informa os valores certos, mas ao passar para api valores chegam nulos
     AdminService.prototype.updateUserRoles = function (user, roles) {
-        return this.http.post(this.baseUrl + 'admin/editRoles/' + user.userName, roles[0]);
+        return this.http.post(this.baseUrl + 'admin/editRoles/' + user.userName, roles);
     };
     AdminService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
@@ -1140,7 +1139,7 @@ var UserManagementComponent = /** @class */ (function () {
         this.bsModalRef = this.modalService.show(_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_4__["RolesModalComponent"], { initialState: initialState });
         this.bsModalRef.content.updateSelectedRoles.subscribe(function (values) {
             var rolesToUpdate = {
-                rolesNames: values.filter(function (el) { return el.checked === true; }).map(function (e) { return e.name; }).slice(),
+                rolesNames: values.filter(function (el) { return el.checked; }).map(function (e) { return e.name; }).slice(),
             };
             if (rolesToUpdate) {
                 _this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(function () {
@@ -1160,10 +1159,10 @@ var UserManagementComponent = /** @class */ (function () {
             { name: 'Member', value: 'Member' },
             { name: 'VIP', value: 'VIP' },
         ];
-        // tslint:disable-next-line:prefer-for-of
+        // tslint:disable-next-line: prefer-for-of
         for (var i = 0; i < availableRoles.length; i++) {
             var isMatch = false;
-            // tslint:disable-next-line:prefer-for-of
+            // tslint:disable-next-line: prefer-for-of
             for (var j = 0; j < userRoles.length; j++) {
                 if (availableRoles[i].name === userRoles[j]) {
                     isMatch = true;

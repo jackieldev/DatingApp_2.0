@@ -36,11 +36,11 @@ export class UserManagementComponent implements OnInit {
     this.bsModalRef = this.modalService.show(RolesModalComponent, { initialState });
     this.bsModalRef.content.updateSelectedRoles.subscribe((values) => {
       const rolesToUpdate = {
-        rolesNames: [{ ...values.filter(el => el.checked).map(e => e.name) }],
+        roleNames: [...values.filter(el => el.checked).map(e => e.name)],
       };
       if (rolesToUpdate) {
         this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(() => {
-          user.roles = [...rolesToUpdate.rolesNames];
+          user.roles = [...rolesToUpdate.roleNames];
         }, error => {
           console.log(error);
         });
@@ -59,10 +59,10 @@ export class UserManagementComponent implements OnInit {
       { name: 'VIP', value: 'VIP' },
     ];
 
-    // tslint:disable-next-line:prefer-for-of
+    // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < availableRoles.length; i++) {
       let isMatch = false;
-      // tslint:disable-next-line:prefer-for-of
+      // tslint:disable-next-line: prefer-for-of
       for (let j = 0; j < userRoles.length; j++) {
         if (availableRoles[i].name === userRoles[j]) {
           isMatch = true;

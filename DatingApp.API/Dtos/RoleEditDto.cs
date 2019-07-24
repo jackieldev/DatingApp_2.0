@@ -5,6 +5,7 @@ namespace DatingApp.API.Dtos
 {
     public class RoleEditDto
     {
-        public List<string> RoleNames { get; set; }
+        public string[] RoleNames { get; set; }
     }
+
 }

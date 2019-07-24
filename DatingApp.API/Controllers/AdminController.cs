@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DatingApp.API.Data;
@@ -52,7 +53,7 @@ namespace DatingApp.API.Controllers
 
             var selectedRoles = roleEditDto.RoleNames;
 
-            selectedRoles = selectedRoles ?? new System.Collections.Generic.List<string>();
+            selectedRoles = selectedRoles ?? new string[] { };
 
             var result = await this._userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
 
