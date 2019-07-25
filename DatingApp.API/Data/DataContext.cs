@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DatingApp.API.Data
 {
-    public class DataContext : IdentityDbContext<User, Role, int,
-        IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>,
-        IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>,
+                                UserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, 
+                                IdentityUserToken<int>>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
@@ -59,6 +59,8 @@ namespace DatingApp.API.Data
                 .HasOne(a => a.Recipient)
                 .WithMany(a => a.MessagesReceived)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Photo>().HasQueryFilter(p => p.IsApproved);
         }
     }
 }

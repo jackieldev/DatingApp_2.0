@@ -30,7 +30,18 @@ webpackEmptyAsyncContext.id = "./$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container mt-5\">\n  <h2>Admin Panel</h2>\n  <div class=\"tab-panel\">\n    <tabset class=\"member-tabset\">\n      <tab heading=\"User Management\" *appHasRole=\"['Admin']\">\n        <div class=\"container\">\n          <app-user-management></app-user-management>\n        </div>\n      </tab>\n      <tab heading=\"Photo Management\" *appHasRole=\"['Admin', 'Moderator']\">\n        <app-photo-editor></app-photo-editor>\n      </tab>\n    </tabset>\n  </div>\n</div>"
+module.exports = "<div class=\"container mt-5\">\n  <h2>Admin Panel</h2>\n  <div class=\"tab-panel\">\n    <tabset class=\"member-tabset\">\n      <tab heading=\"User Management\" *appHasRole=\"['Admin']\">\n        <div class=\"container\">\n          <app-user-management></app-user-management>\n        </div>\n      </tab>\n      <tab heading=\"Photo Management\" *appHasRole=\"['Admin', 'Moderator']\">\n        <app-photo-management ></app-photo-management>\n      </tab>\n    </tabset>\n  </div>\n</div>"
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/index.js!./src/app/admin/photo-management/photo-management.component.html":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/raw-loader!./src/app/admin/photo-management/photo-management.component.html ***!
+  \**************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-2\" *ngFor=\"let photo of photos\">\n    <h4>{{photo.userName}}</h4>\n    <img src=\"{{photo.url}}\" class=\"img-thumbnail p-1\" alt=\"photo.userName\">\n\n    <div class=\"text-center\">\n      <button type=\"button\" class=\"btn btn-sm btn-success active mr-1\" \n        (click)=\"approvePhoto(photo.id)\">Approve</button>\n      <button type=\"button\" class=\"btn btn-sm btn-danger\" \n        (click)=\"rejectPhoto(photo.id)\">Reject</button>\n    </div>\n  </div>\n</div>"
 
 /***/ }),
 
@@ -151,7 +162,7 @@ module.exports = "<div class=\"card\">\n  <div class=\"card-body\">\n    <div *n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-sm-2\" *ngFor=\"let photo of photos\">\n    <img src=\"{{photo.url}}\" class=\"img-thumbnail p-1\" alt=\"\">\n    <div class=\"text-center\">\n        <button type=\"button\" class=\"btn btn-sm mr-1\" \n              (click)=\"setMainPhoto(photo)\"\n              [ngClass]=\"photo.isMain ? 'btn-success active' : 'btn-secondary'\"\n              [disabled]=\"photo.isMain\">Main\n        </button>\n        <button type=\"button\" class=\"btn btn-sm btn-danger\" \n              (click)=\"deletePhoto(photo.id)\"\n              [disabled]=\"photo.isMain\"><i class=\"fa fa-trash-o\"></i>\n        </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"row mt-3\">\n \n    <div class=\"col-md-3\">\n\n        <h3>Add Photos</h3>\n\n        <div ng2FileDrop\n             [ngClass]=\"{'nv-file-over': hasBaseDropZoneOver}\"\n             (fileOver)=\"fileOverBase($event)\"\n             [uploader]=\"uploader\"\n             class=\"card bg-faded p-3 text-center mb-3 my-drop-zone\">\n             <i class=\"fa fa-upload fa-3x\" ></i>\n             Drop Photos Here\n        </div>\n\n        Multiple\n        <input type=\"file\" ng2FileSelect [uploader]=\"uploader\" multiple  /><br/>\n\n        Single\n        <input type=\"file\" ng2FileSelect [uploader]=\"uploader\" />\n    </div>\n\n    <div class=\"col-md-9\" style=\"margin-bottom: 40px\" *ngIf=\"uploader?.queue?.length\">\n\n        <h3>Upload queue</h3>\n        <p>Queue length: {{ uploader?.queue?.length }}</p>\n\n        <table class=\"table\">\n            <thead>\n            <tr>\n                <th width=\"50%\">Name</th>\n                <th>Size</th>\n            </tr>\n            </thead>\n            <tbody>\n            <tr *ngFor=\"let item of uploader.queue\">\n                <td><strong>{{ item?.file?.name }}</strong></td>\n                <td *ngIf=\"uploader.options.isHTML5\" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>\n            </tr>\n            </tbody>\n        </table>\n\n        <div>\n            <div>\n                Queue progress:\n                <div class=\"progress mb-4\" >\n                    <div class=\"progress-bar\" role=\"progressbar\" [ngStyle]=\"{ 'width': uploader.progress + '%' }\"></div>\n                </div>\n            </div>\n            <button type=\"button\" class=\"btn btn-success btn-s\"\n                    (click)=\"uploader.uploadAll()\" [disabled]=\"!uploader.getNotUploadedItems().length\">\n                <span class=\"fa fa-upload\"></span> Upload\n            </button>\n            <button type=\"button\" class=\"btn btn-warning btn-s\"\n                    (click)=\"uploader.cancelAll()\" [disabled]=\"!uploader.isUploading\">\n                <span class=\"fa fa-ban\"></span> Cancel\n            </button>\n            <button type=\"button\" class=\"btn btn-danger btn-s\"\n                    (click)=\"uploader.clearQueue()\" [disabled]=\"!uploader.queue.length\">\n                <span class=\"fa fa-trash\"></span> Remove\n            </button>\n        </div>\n\n    </div>\n\n</div>"
+module.exports = "<div class=\"row\">\n  <div class=\"col-sm-2 img-wrapper\" *ngFor=\"let photo of photos\">\n    <img src=\"{{photo.url}}\" class=\"img-thumbnail p-1\" alt=\"\"\n        [ngClass]=\"!photo.isApproved && 'not-approved'\">\n\n    <div class=\"text-center img-text\" *ngIf=\"!photo.isApproved\">\n        <span class=\"text-danger\">Awaiting approval</span>\n    </div>\n    \n    <div class=\"text-center\">\n        <button type=\"button\" class=\"btn btn-sm mr-1\" \n              [ngClass]=\"photo.isMain ? 'btn-success active' : 'btn-secondary'\"\n              (click)=\"setMainPhoto(photo)\"\n              [disabled]=\"photo.isMain || !photo.isApproved\">Main</button>\n        <button type=\"button\" class=\"btn btn-sm btn-danger\" \n              [disabled]=\"photo.isMain\"\n              (click)=\"deletePhoto(photo.id)\"><i class=\"fa fa-trash-o\"></i>\n        </button>\n    </div>\n  </div>\n</div>\n\n<div class=\"row mt-3\">\n \n    <div class=\"col-md-3\">\n        <h3>Add Photos</h3>\n        <div ng2FileDrop\n             class=\"card bg-faded p-3 text-center mb-3 my-drop-zone\"\n             [ngClass]=\"{'nv-file-over': hasBaseDropZoneOver}\"\n             (fileOver)=\"fileOverBase($event)\"\n             [uploader]=\"uploader\">\n            <i class=\"fa fa-upload fa-3x\" ></i>\n            Drop Photos Here\n        </div>\n            Multiple\n        <input type=\"file\" ng2FileSelect [uploader]=\"uploader\" multiple  />\n        <br/>\n            Single\n        <input type=\"file\" ng2FileSelect [uploader]=\"uploader\" />\n    </div>\n\n    <div class=\"col-md-9\" style=\"margin-bottom: 40px\" *ngIf=\"uploader?.queue?.length\">\n        <h3>Upload queue</h3>\n        <p>Queue length: {{ uploader?.queue?.length }}</p>\n        <table class=\"table\">\n            <thead>\n                <tr>\n                    <th width=\"50%\">Name</th>\n                    <th>Size</th>\n                </tr>\n            </thead>\n            <tbody>\n            <tr *ngFor=\"let item of uploader.queue\">\n                <td><strong>{{ item?.file?.name }}</strong></td>\n                <td *ngIf=\"uploader.options.isHTML5\" nowrap>\n                    {{ item?.file?.size/1024/1024 | number:'.2' }} MB\n                </td>\n            </tr>\n            </tbody>\n        </table>\n        <div>\n            <div>\n                Queue progress:\n                <div class=\"progress mb-4\" >\n                    <div class=\"progress-bar\" role=\"progressbar\" \n                        [ngStyle]=\"{ 'width': uploader.progress + '%' }\">\n                    </div>\n                </div>\n            </div>\n            <button type=\"button\" class=\"btn btn-success btn-s mr-1\"\n                    (click)=\"uploader.uploadAll()\" \n                    [disabled]=\"!uploader.getNotUploadedItems().length\">\n                <span class=\"fa fa-upload\"></span> Upload\n            </button>\n            <button type=\"button\" class=\"btn btn-warning btn-s mr-1\"\n                    (click)=\"uploader.cancelAll()\" \n                    [disabled]=\"!uploader.isUploading\">\n                <span class=\"fa fa-ban\"></span> Cancel\n            </button>\n            <button type=\"button\" class=\"btn btn-danger btn-s\"\n                    (click)=\"uploader.clearQueue()\" \n                    [disabled]=\"!uploader.queue.length\">\n                <span class=\"fa fa-trash\"></span> Remove\n            </button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -655,6 +666,15 @@ var AdminService = /** @class */ (function () {
     AdminService.prototype.updateUserRoles = function (user, roles) {
         return this.http.post(this.baseUrl + 'admin/editRoles/' + user.userName, roles);
     };
+    AdminService.prototype.getPhotosForApproval = function () {
+        return this.http.get(this.baseUrl + 'admin/photosForModeration');
+    };
+    AdminService.prototype.approvePhoto = function (photoId) {
+        return this.http.post(this.baseUrl + 'admin/approvePhoto/' + photoId, {});
+    };
+    AdminService.prototype.rejectPhoto = function (photoId) {
+        return this.http.post(this.baseUrl + 'admin/rejectPhoto' + photoId, {});
+    };
     AdminService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
             providedIn: 'root'
@@ -749,7 +769,7 @@ var AuthService = /** @class */ (function () {
         this.http = http;
         this.baseUrl = _environments_environment__WEBPACK_IMPORTED_MODULE_6__["environment"].apiUrl + 'auth/';
         this.jwtHelper = new _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_5__["JwtHelperService"]();
-        this.photoUrl = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]('../../assets/user.png');
+        this.photoUrl = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"]('../../assets/user.png'); // exemplo de BehaviorSubject
         this.currentPhotoUrl = this.photoUrl.asObservable();
     }
     AuthService.prototype.changeMemberPhoto = function (photoUrl) {
@@ -1026,6 +1046,78 @@ var AdminPanelComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/admin/photo-management/photo-management.component.css":
+/*!***********************************************************************!*\
+  !*** ./src/app/admin/photo-management/photo-management.component.css ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "img.img-thumbnail {\r\n    height: 150;\r\n    min-width: 150 !important;\r\n    margin-bottom: 2px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvYWRtaW4vcGhvdG8tbWFuYWdlbWVudC9waG90by1tYW5hZ2VtZW50LmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0lBQ1gseUJBQXlCO0lBQ3pCLGtCQUFrQjtBQUN0QiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL3Bob3RvLW1hbmFnZW1lbnQvcGhvdG8tbWFuYWdlbWVudC5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW1nLmltZy10aHVtYm5haWwge1xyXG4gICAgaGVpZ2h0OiAxNTA7XHJcbiAgICBtaW4td2lkdGg6IDE1MCAhaW1wb3J0YW50O1xyXG4gICAgbWFyZ2luLWJvdHRvbTogMnB4O1xyXG59Il19 */"
+
+/***/ }),
+
+/***/ "./src/app/admin/photo-management/photo-management.component.ts":
+/*!**********************************************************************!*\
+  !*** ./src/app/admin/photo-management/photo-management.component.ts ***!
+  \**********************************************************************/
+/*! exports provided: PhotoManagementComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PhotoManagementComponent", function() { return PhotoManagementComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_app_services_admin_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/_services/admin.service */ "./src/app/_services/admin.service.ts");
+
+
+
+var PhotoManagementComponent = /** @class */ (function () {
+    function PhotoManagementComponent(adminService) {
+        this.adminService = adminService;
+    }
+    PhotoManagementComponent.prototype.ngOnInit = function () {
+        this.loadPhotos();
+    };
+    PhotoManagementComponent.prototype.loadPhotos = function () {
+        this.adminService.getPhotosForApproval().subscribe(function (photos) {
+            photos = photos;
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    PhotoManagementComponent.prototype.approvePhoto = function (photoId) {
+        var _this = this;
+        this.adminService.approvePhoto(photoId).subscribe(function () {
+            _this.photos.splice(_this.photos.findIndex(function (p) { return p.id === photoId; }), 1);
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    PhotoManagementComponent.prototype.rejectPhoto = function (photoId) {
+        var _this = this;
+        this.adminService.rejectPhoto(photoId).subscribe(function () {
+            _this.photos.splice(_this.photos.findIndex(function (p) { return p.id === photoId; }), 1);
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    PhotoManagementComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-photo-management',
+            template: __webpack_require__(/*! raw-loader!./photo-management.component.html */ "./node_modules/raw-loader/index.js!./src/app/admin/photo-management/photo-management.component.html"),
+            styles: [__webpack_require__(/*! ./photo-management.component.css */ "./src/app/admin/photo-management/photo-management.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_services_admin_service__WEBPACK_IMPORTED_MODULE_2__["AdminService"]])
+    ], PhotoManagementComponent);
+    return PhotoManagementComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/admin/roles-modal/roles-modal.component.css":
 /*!*************************************************************!*\
   !*** ./src/app/admin/roles-modal/roles-modal.component.css ***!
@@ -1139,11 +1231,11 @@ var UserManagementComponent = /** @class */ (function () {
         this.bsModalRef = this.modalService.show(_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_4__["RolesModalComponent"], { initialState: initialState });
         this.bsModalRef.content.updateSelectedRoles.subscribe(function (values) {
             var rolesToUpdate = {
-                rolesNames: values.filter(function (el) { return el.checked; }).map(function (e) { return e.name; }).slice(),
+                roleNames: values.filter(function (el) { return el.checked; }).map(function (e) { return e.name; }).slice(),
             };
             if (rolesToUpdate) {
                 _this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(function () {
-                    user.roles = rolesToUpdate.rolesNames.slice();
+                    user.roles = rolesToUpdate.roleNames.slice();
                 }, function (error) {
                     console.log(error);
                 });
@@ -1184,7 +1276,8 @@ var UserManagementComponent = /** @class */ (function () {
             template: __webpack_require__(/*! raw-loader!./user-management.component.html */ "./node_modules/raw-loader/index.js!./src/app/admin/user-management/user-management.component.html"),
             styles: [__webpack_require__(/*! ./user-management.component.css */ "./src/app/admin/user-management/user-management.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_services_admin_service__WEBPACK_IMPORTED_MODULE_2__["AdminService"], ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_3__["BsModalService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_services_admin_service__WEBPACK_IMPORTED_MODULE_2__["AdminService"],
+            ngx_bootstrap_modal__WEBPACK_IMPORTED_MODULE_3__["BsModalService"]])
     ], UserManagementComponent);
     return UserManagementComponent;
 }());
@@ -1306,6 +1399,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _admin_user_management_user_management_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./admin/user-management/user-management.component */ "./src/app/admin/user-management/user-management.component.ts");
 /* harmony import */ var _services_admin_service__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./_services/admin.service */ "./src/app/_services/admin.service.ts");
 /* harmony import */ var _admin_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./admin/roles-modal/roles-modal.component */ "./src/app/admin/roles-modal/roles-modal.component.ts");
+/* harmony import */ var _admin_photo_management_photo_management_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./admin/photo-management/photo-management.component */ "./src/app/admin/photo-management/photo-management.component.ts");
+
 
 
 
@@ -1371,7 +1466,7 @@ var AppModule = /** @class */ (function () {
                 _admin_admin_panel_admin_panel_component__WEBPACK_IMPORTED_MODULE_35__["AdminPanelComponent"],
                 _directives_hasRole_directive__WEBPACK_IMPORTED_MODULE_36__["HasRoleDirective"],
                 _admin_user_management_user_management_component__WEBPACK_IMPORTED_MODULE_37__["UserManagementComponent"],
-                _members_photo_editor_photo_editor_component__WEBPACK_IMPORTED_MODULE_31__["PhotoEditorComponent"],
+                _admin_photo_management_photo_management_component__WEBPACK_IMPORTED_MODULE_40__["PhotoManagementComponent"],
                 _admin_roles_modal_roles_modal_component__WEBPACK_IMPORTED_MODULE_39__["RolesModalComponent"]
             ],
             imports: [
@@ -2005,7 +2100,7 @@ var MemberMessagesComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "img.img-thumbnail {\r\n    height: 100px;\r\n    min-width: 100px !important;\r\n    margin-bottom: 2px;\r\n}\r\n\r\n.nv-file-over {\r\n    border: dotted 3px red;\r\n}\r\n\r\ninput[type=file] {\r\n    color: transparent;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbWVtYmVycy9waG90by1lZGl0b3IvcGhvdG8tZWRpdG9yLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxhQUFhO0lBQ2IsMkJBQTJCO0lBQzNCLGtCQUFrQjtBQUN0Qjs7QUFFQTtJQUNJLHNCQUFzQjtBQUMxQjs7QUFFQTtJQUNJLGtCQUFrQjtBQUN0QiIsImZpbGUiOiJzcmMvYXBwL21lbWJlcnMvcGhvdG8tZWRpdG9yL3Bob3RvLWVkaXRvci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiaW1nLmltZy10aHVtYm5haWwge1xyXG4gICAgaGVpZ2h0OiAxMDBweDtcclxuICAgIG1pbi13aWR0aDogMTAwcHggIWltcG9ydGFudDtcclxuICAgIG1hcmdpbi1ib3R0b206IDJweDtcclxufVxyXG5cclxuLm52LWZpbGUtb3ZlciB7XHJcbiAgICBib3JkZXI6IGRvdHRlZCAzcHggcmVkO1xyXG59XHJcblxyXG5pbnB1dFt0eXBlPWZpbGVdIHtcclxuICAgIGNvbG9yOiB0cmFuc3BhcmVudDtcclxufSJdfQ== */"
+module.exports = "img.img-thumbnail {\r\n    height: 100px;\r\n    min-width: 100px !important;\r\n    margin-bottom: 2px;\r\n}\r\n\r\n.nv-file-over {\r\n    border: dotted 3px red;\r\n}\r\n\r\ninput[type=file] {\r\n    color: transparent;\r\n}\r\n\r\n.not-approved {\r\n    opacity: 0.2;\r\n}\r\n\r\n.img-wrapper {\r\n    position: relative;\r\n}\r\n\r\n.img-text {\r\n    position: absolute;\r\n    bottom: 30%;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbWVtYmVycy9waG90by1lZGl0b3IvcGhvdG8tZWRpdG9yLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxhQUFhO0lBQ2IsMkJBQTJCO0lBQzNCLGtCQUFrQjtBQUN0Qjs7QUFFQTtJQUNJLHNCQUFzQjtBQUMxQjs7QUFFQTtJQUNJLGtCQUFrQjtBQUN0Qjs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxrQkFBa0I7QUFDdEI7O0FBRUE7SUFDSSxrQkFBa0I7SUFDbEIsV0FBVztBQUNmIiwiZmlsZSI6InNyYy9hcHAvbWVtYmVycy9waG90by1lZGl0b3IvcGhvdG8tZWRpdG9yLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJpbWcuaW1nLXRodW1ibmFpbCB7XHJcbiAgICBoZWlnaHQ6IDEwMHB4O1xyXG4gICAgbWluLXdpZHRoOiAxMDBweCAhaW1wb3J0YW50O1xyXG4gICAgbWFyZ2luLWJvdHRvbTogMnB4O1xyXG59XHJcblxyXG4ubnYtZmlsZS1vdmVyIHtcclxuICAgIGJvcmRlcjogZG90dGVkIDNweCByZWQ7XHJcbn1cclxuXHJcbmlucHV0W3R5cGU9ZmlsZV0ge1xyXG4gICAgY29sb3I6IHRyYW5zcGFyZW50O1xyXG59XHJcblxyXG4ubm90LWFwcHJvdmVkIHtcclxuICAgIG9wYWNpdHk6IDAuMjtcclxufVxyXG5cclxuLmltZy13cmFwcGVyIHtcclxuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxufVxyXG5cclxuLmltZy10ZXh0IHtcclxuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICAgIGJvdHRvbTogMzAlO1xyXG59Il19 */"
 
 /***/ }),
 
@@ -2046,9 +2141,6 @@ var PhotoEditorComponent = /** @class */ (function () {
     PhotoEditorComponent.prototype.ngOnInit = function () {
         this.initializeUploader();
     };
-    PhotoEditorComponent.prototype.fileOverBase = function (e) {
-        this.hasBaseDropZoneOver = e;
-    };
     PhotoEditorComponent.prototype.initializeUploader = function () {
         var _this = this;
         this.uploader = new ng2_file_upload__WEBPACK_IMPORTED_MODULE_2__["FileUploader"]({
@@ -2069,7 +2161,8 @@ var PhotoEditorComponent = /** @class */ (function () {
                     url: res.url,
                     dateAdded: res.dateAdded,
                     description: res.description,
-                    isMain: res.isMain
+                    isMain: res.isMain,
+                    isApproved: res.isApproved
                 };
                 _this.photos.push(photo);
                 if (photo.isMain) {
@@ -2080,9 +2173,13 @@ var PhotoEditorComponent = /** @class */ (function () {
             }
         };
     };
+    PhotoEditorComponent.prototype.fileOverBase = function (e) {
+        this.hasBaseDropZoneOver = e;
+    };
     PhotoEditorComponent.prototype.setMainPhoto = function (photo) {
         var _this = this;
-        this.userService.setMainPhoto(this.authService.decodeToken.nameid, photo.id)
+        this.userService
+            .setMainPhoto(this.authService.decodeToken.nameid, photo.id)
             .subscribe(function () {
             _this.currentMain = _this.photos.filter(function (p) { return p.isMain === true; })[0];
             _this.currentMain.isMain = false;
@@ -2120,7 +2217,9 @@ var PhotoEditorComponent = /** @class */ (function () {
             template: __webpack_require__(/*! raw-loader!./photo-editor.component.html */ "./node_modules/raw-loader/index.js!./src/app/members/photo-editor/photo-editor.component.html"),
             styles: [__webpack_require__(/*! ./photo-editor.component.css */ "./src/app/members/photo-editor/photo-editor.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"], src_app_services_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"], src_app_services_alertify_service__WEBPACK_IMPORTED_MODULE_6__["AlertifyService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_services_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"],
+            src_app_services_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"],
+            src_app_services_alertify_service__WEBPACK_IMPORTED_MODULE_6__["AlertifyService"]])
     ], PhotoEditorComponent);
     return PhotoEditorComponent;
 }());

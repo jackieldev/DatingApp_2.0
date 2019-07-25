@@ -13,7 +13,8 @@ export class UserManagementComponent implements OnInit {
   users: User[];
   bsModalRef: BsModalRef;
 
-  constructor(private adminService: AdminService, private modalService: BsModalService) { }
+  constructor(private adminService: AdminService,
+              private modalService: BsModalService) { }
 
   ngOnInit() {
     this.getUsersWithRoles();

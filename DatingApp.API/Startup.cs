@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -110,7 +109,8 @@ namespace DatingApp.API
                 options.Filters.Add(new AuthorizeFilter(policy));
 
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-              .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+              .AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling =
+                                        Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddCors();
             services.Configure<CloudinarySettings>(this.Configuration.GetSection("CloudinarySettings"));
@@ -150,9 +150,11 @@ namespace DatingApp.API
             seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseAuthentication();
-            
+
+            //wwwroot
             //app.UseDefaultFiles();
             //app.UseStaticFiles();
+
             app.UseMvc();
             //     routes => {
             //     routes.MapSpaFallbackRoute(

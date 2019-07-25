@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DatingApp.API.Models;
@@ -36,13 +37,18 @@ namespace DatingApp.API.Data
 
                 foreach (var user in users)
                 {
+                    user.Photos.SingleOrDefault().IsApproved = true;
                     this._userManager.CreateAsync(user, "password").Wait();
                     this._userManager.AddToRoleAsync(user, "Member").Wait();
                 }
 
                 var adminUser = new User
                 {
-                    UserName = "Admin"
+                    UserName = "Admin",
+                    LastActive = DateTime.Now,
+                    Created = DateTime.Now,
+                    City = "Piauí",
+                    Country = "Brasil"
                 };
 
                 IdentityResult result = this._userManager.CreateAsync(adminUser, "password").Result;

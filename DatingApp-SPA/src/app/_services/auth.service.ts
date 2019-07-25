@@ -14,7 +14,7 @@ export class AuthService {
   jwtHelper = new JwtHelperService();
   decodeToken: any;
   currentUser: User;
-  photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  photoUrl = new BehaviorSubject<string>('../../assets/user.png'); // exemplo de BehaviorSubject
   currentPhotoUrl = this.photoUrl.asObservable();
 
   constructor(private http: HttpClient) { }

@@ -19,14 +19,12 @@ export class PhotoEditorComponent implements OnInit {
   baseUrl = environment.apiUrl;
   currentMain: Photo;
 
-  constructor(private authService: AuthService, private userService: UserService, private alertify: AlertifyService) { }
+  constructor(private authService: AuthService,
+              private userService: UserService,
+              private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.initializeUploader();
-  }
-
-  fileOverBase(e: any): void {
-    this.hasBaseDropZoneOver = e;
   }
 
   initializeUploader() {
@@ -50,7 +48,8 @@ export class PhotoEditorComponent implements OnInit {
           url: res.url,
           dateAdded: res.dateAdded,
           description: res.description,
-          isMain: res.isMain
+          isMain: res.isMain,
+          isApproved: res.isApproved
         };
         this.photos.push(photo);
         if (photo.isMain) {
@@ -60,6 +59,10 @@ export class PhotoEditorComponent implements OnInit {
         }
       }
     };
+  }
+
+  fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
   }
 
   setMainPhoto(photo: Photo) {
