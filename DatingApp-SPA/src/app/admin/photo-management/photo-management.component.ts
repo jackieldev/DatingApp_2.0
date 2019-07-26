@@ -19,7 +19,7 @@ export class PhotoManagementComponent implements OnInit {
 
   loadPhotos() {
     this.adminService.getPhotosForApproval().subscribe((photos) => {
-      photos = photos;
+      this.photos = photos;
     }, error => {
       console.log(error);
     });
@@ -34,6 +34,7 @@ export class PhotoManagementComponent implements OnInit {
   }
 
   rejectPhoto(photoId) {
+    console.log(photoId);
     this.adminService.rejectPhoto(photoId).subscribe(() => {
       this.photos.splice(this.photos.findIndex(p => p.id === photoId), 1);
     }, error => {

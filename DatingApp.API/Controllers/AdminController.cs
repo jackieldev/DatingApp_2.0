@@ -108,7 +108,7 @@ namespace DatingApp.API.Controllers
 
 
         [Authorize(Policy = "ModeratePhotoRole")]
-        [HttpGet("approvePhoto/{photoId}")]
+        [HttpPost("approvePhoto/{photoId}")]
         public async Task<IActionResult> ApprovePhoto(int photoId)
         {
             var photo = await this._context.Photos
@@ -124,12 +124,12 @@ namespace DatingApp.API.Controllers
 
 
         [Authorize(Policy = "ModeratePhotoRole")]
-        [HttpGet("rejectPhoto/{photoId}")]
+        [HttpPost("rejectPhoto/{photoId}")]
         public async Task<IActionResult> RejectPhoto(int photoId)
         {
             var photo = await this._context.Photos
                         .IgnoreQueryFilters()
-                        .FirstOrDefaultAsync(x => x.Equals(photoId));
+                        .FirstOrDefaultAsync(x => x.Id.Equals(photoId));
 
             if (photo.IsMain)
                 return BadRequest("You cannot reject the main photo");
